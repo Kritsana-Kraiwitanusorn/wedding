@@ -81,7 +81,7 @@
         }
 
         /* หัวใจตรงกลาง */
-        .heart-center {
+        /* .heart-center {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
@@ -90,10 +90,34 @@
             z-index: 5;
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
             transition: all 0.4s ease;
+        } */
+
+        .heart-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px; /* ขนาดที่พอดีสำหรับมือถือและคอม */
+            height: 60px;
+            z-index: 5;
+            cursor: pointer;
+            filter: drop-shadow(0 4px 8px rgba(255, 177, 177, 0.4));
+            animation: heartFloat 3s ease-in-out infinite; /* เพิ่มลูกเล่นขยับขึ้นลง */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes heartFloat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -55%) scale(1.05); }
         }
 
         .envelope:hover .heart-center {
             transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        .heart-svg {
+            fill: var(--soft-pink);
+            stroke-width: 2;
+            stroke-linejoin: round;
         }
 
         /* การ์ดด้านในที่ซ่อนอยู่ */
@@ -232,24 +256,37 @@
         .timeline-item.left { left: 0; text-align: right; }
         .timeline-item.right { left: 50%; /*Add*/ text-align: left; }
         .timeline-item::after {
-            content: '❤';
+            content: ''; 
             position: absolute;
-            right: -12px; 
-            top: 20px;
-            height: 30px;
-            width: 30px;
-            background: white; 
-            color: var(--deep-pink);
-            border: 3px solid var(--soft-pink);
-            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            right: -17px;
+            top: 12px;
+            background-color: white; 
+            border-radius: 50%; /* ทำเป็นวงกลม */
+            border: 2px solid var(--soft-pink);
             z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* เพิ่มเงาเบาๆ ให้ดูมีมิติ */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFB1B1'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-size: 18px; /* ขนาดของรูปหัวใจด้านใน */
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: all 0.3s ease;
         }
-        .timeline-item.right::after { left: -12px; }
-        .timeline-item.left::after { right: -12px; }
+        /* เมื่อเอาเมาส์ไปชี้ที่กล่องข้อความ ให้หัวใจขยายเด้งดึ๋ง */
+        .timeline-item:hover::after {
+            transform: scale(1.2);
+            border-color: var(--deep-pink);
+        }
+        .timeline-item.right::after { left: -17px; }  /* เดิม -12*/
+        .timeline-item.left::after { right: -17px; }
+
+        /* แก้ไข Media Query สำหรับมือถือให้ตำแหน่งตรงกัน */
+        @media (max-width: 768px) {
+            .timeline-item.right::after {
+                left: -17px !important;
+            }
+        }
 
         /* --- Theme --- */
         .theme-box {
@@ -380,10 +417,14 @@
             <div class="envelope" id="mainEnvelope" onclick="handleOpen()">
                 <div class="flap"></div>
                 <div class="card-inside">
-                    <p style="font-family:'Dancing Script'; font-size: 1.8rem; color: var(--deep-pink);">Koy ❤ Best</p>
-                    <p style="font-size: 0.8rem; margin-top: 20px;">Koy & Best</p>
+                    <h4 style="font-family:'Dancing Script'; font-size: 1.8rem; color: var(--deep-pink);">Koy & Best</h4>
+                    <p style="font-size: 0.8rem; margin-top: 20px;">20.12.2026</p>
                 </div>
-                <div class="heart-center">&#10084</div>
+                <div class="heart-center">
+                    <svg viewBox="0 0 32 32" class="heart-svg">
+                        <path d="M16 28.5L14.3 26.8C8.2 21.3 4 17.5 4 12.9C4 9.1 7 6.1 10.8 6.1C13 6.1 15.1 7.1 16.5 8.7C17.9 7.1 20 6.1 22.2 6.1C26 6.1 29 9.1 29 12.9C29 17.5 24.8 21.3 18.7 26.8L17 28.5H16Z" />
+                    </svg>
+                </div>
             </div>
         </div>
         <p class="tap-hint">Tap to Open</p>
@@ -514,4 +555,3 @@
     </script>
 </body>
 </html>
-

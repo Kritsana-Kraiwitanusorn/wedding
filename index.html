@@ -80,18 +80,6 @@
             box-shadow: inset 0 -5px 15px rgba(0,0,0,0.02);
         }
 
-        /* หัวใจตรงกลาง */
-        /* .heart-center {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 40px;
-            color: var(--deep-pink);
-            z-index: 5;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
-            transition: all 0.4s ease;
-        } */
-
         .heart-center {
             position: absolute;
             top: 50%; left: 50%;
@@ -417,8 +405,8 @@
             <div class="envelope" id="mainEnvelope" onclick="handleOpen()">
                 <div class="flap"></div>
                 <div class="card-inside">
-                    <h4 style="font-family:'Dancing Script'; font-size: 1.8rem; color: var(--deep-pink);">Koy & Best</h4>
-                    <p style="font-size: 0.8rem; margin-top: 20px;">20.12.2026</p>
+                    <h2 style="font-family:'Dancing Script'; font-size: 1.8rem; color: var(--deep-pink);">Koy & Best</h2>
+                    <p style="font-size: 0.8rem; margin-top: 20px;">20.11.2026</p>
                 </div>
                 <div class="heart-center">
                     <svg viewBox="0 0 32 32" class="heart-svg">
@@ -434,7 +422,7 @@
         <section class="hero">
             <h1>Koy & Best</h1>
             <h2 style="font-weight: 300;">Saving the Date</h2>
-            <h2 style="font-weight: 300;">20 December 2026</h2>
+            <h2 style="font-weight: 300;">20 November 2026</h2>
         </section>
 
         <section class="section">
@@ -464,7 +452,7 @@
             <div class="timeline">
                 <div class="timeline-item left"><h4>First Met</h4><p>วันที่เราเจอกันครั้งแรก</p></div>
                 <div class="timeline-item right"><h4>First Date</h4><p>เดทแรกที่จำไม่ลืม</p></div>
-                <div class="timeline-item left"><h4>The Proposal</h4><p>วันที่ตัดสินใจจะใช้ชีวิตคู่ร่วมกัน</p></div>
+                <div class="timeline-item left"><h4>The Proposal</h4><p>วันที่ตัดสินใจเป็นแฟนกัน</p></div>
                 <div class="timeline-item right"><h4>The Proposal</h4><p>วันที่ตัดสินใจจะใช้ชีวิตคู่ร่วมกัน</p></div>
             </div>
         </section>
@@ -476,7 +464,7 @@
                 <div class="theme-content">
                     <div class="rainbow-icon">🌈</div>
                     <h4>Rainbow Theme (สายรุ้ง)</h4>
-                    <p>มาเติมสีสันให้วันของเราสดใสด้วยกันนะครับ</p>
+                    <p>มาเติมสีสันให้วันของเราสดใสด้วยกันนะ</p>
                     <div class="color-palette">
                         <span class="color-dot" style="background: #f8afaf"></span>
                         <span class="color-dot" style="background: #fdda97"></span>
@@ -491,9 +479,9 @@
 
         <section id="location" class="section">
             <h3>Location & Map</h3>
-            <p>โรงแรมแกรนด์ พาเลซ (Grand Palace Hotel)</p>
+            <p>Auntie's garden cafe & restaurant</p>
             <div style="margin: 20px 0;">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.0!2d100.5!3d13.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQyJzAwLjAiTiAxMDDCsDMwJzAwLjAiRQ!5e0!3m2!1sth!2sth!4v1625000000000!5m2!1sth!2sth" width="100%" height="300" style="border:0; border-radius: 15px;" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4764.538294919375!2d100.50368407586724!3d13.950702792655854!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e2850d86a41129%3A0x6c82021a0f679eff!2sAuntie&#39;s%20garden%20cafe%20%26%20restaurant!5e1!3m2!1sen!2sth!4v1773642137594!5m2!1sen!2sth" width="100%" height="300" style="border:0; border-radius: 15px;" allowfullscreen="" loading="lazy"></iframe>
             </div>
             <div>
                 <p>Scan for Navigation</p>
@@ -502,7 +490,7 @@
         </section>
 
         <footer style="text-align: center; padding: 40px; color: #aaa; font-size: 0.8rem;">
-            CREATED BY BUCKBEST ❤ FOR KOY & BEST | 20.12.2026
+            CREATED BY BUCKBEST ❤ FOR KOY & BEST | 20.11.2026
         </footer>
     </div>
 
@@ -529,7 +517,7 @@
         }
 
         // --- Countdown Timer Logic ---
-        const weddingDate = new Date("Dec 20, 2026 00:00:00").getTime();
+        const weddingDate = new Date("Nov 20, 2026 15:00:00").getTime();
 
         const x = setInterval(function() {
             const now = new Date().getTime();

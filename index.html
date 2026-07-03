@@ -3,20 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koy & Best Wedding</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Mali:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>Koy & Best Wedding | 20.11.2026</title>
+    <meta name="description" content="ขอเชิญร่วมงานแต่งงานของ Koy & Best วันที่ 20 พฤศจิกายน 2026 ณ Auntie's garden cafe & restaurant">
+    <meta name="theme-color" content="#FFB1B1">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Koy & Best Wedding">
+    <meta property="og:description" content="Save the Date — 20 พฤศจิกายน 2026">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://i.ibb.co/4wW7nc27/IMG-4064.jpg">
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='28'%3E%F0%9F%92%95%3C/text%3E%3C/svg%3E">
+
+    <!-- Performance: connect early to the origins we actually load from -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://i.ibb.co">
+    <link rel="dns-prefetch" href="https://www.google.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Charmonman:wght@400;700&family=Mali:wght@300;500;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --bg-cream: #FFFDF9;
             --soft-pink: #FFE5E5;
             --deep-pink: #FFB1B1;
+            --deep-pink-dark: #E88E8E;
             --text-gray: #555;
             --rainbow-gradient: linear-gradient(to right, #ffadad, #ffd6a5, #fdffb6, #caffbf, #9bf6ff, #a0c4ff, #bdb2ff, #ffc6ff);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* --- Welcome Envelope Section --- 000 */
+        html { scroll-behavior: smooth; }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        body {
+            font-family: 'Mali', cursive;
+            background-color: var(--bg-cream);
+            color: var(--text-gray);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { color: var(--deep-pink-dark); }
+
+        :focus-visible {
+            outline: 3px solid var(--deep-pink-dark);
+            outline-offset: 3px;
+        }
+
+        /* --- Scroll progress bar --- */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            width: 0%;
+            background: var(--rainbow-gradient);
+            background-size: 200% 100%;
+            z-index: 10000;
+            transition: width 0.1s ease-out;
+        }
+
+        /* --- Welcome Envelope Section --- */
         #welcome-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -26,14 +84,13 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: all 1s ease-in-out;
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
         }
 
         .envelope-glow {
             position: relative;
             padding: 5px;
             border-radius: 15px;
-            /* background: var(--deep-pink); */
             background-size: 200% 200%;
             animation: rainbowMove 4s linear infinite;
             box-shadow: 0 15px 50px rgba(252, 132, 132, 0.3);
@@ -47,7 +104,7 @@
 
         .envelope {
             position: relative;
-            width: 350px; 
+            width: 350px;
             height: 230px;
             background: white;
             border-radius: 10px;
@@ -55,7 +112,8 @@
             overflow: visible;
         }
 
-        /* ฝาซองด้านบน */
+        .envelope:focus-visible { outline-offset: 6px; }
+
         .flap {
             position: absolute;
             top: 0; left: 0; width: 0; height: 0;
@@ -68,7 +126,6 @@
             z-index: 4;
         }
 
-        /* ตัวซองจดหมาย (ส่วนล่าง) */
         .envelope::after {
             content: '';
             position: absolute;
@@ -84,12 +141,12 @@
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 60px; /* ขนาดที่พอดีสำหรับมือถือและคอม */
+            width: 60px;
             height: 60px;
             z-index: 5;
             cursor: pointer;
             filter: drop-shadow(0 4px 8px rgba(255, 177, 177, 0.4));
-            animation: heartFloat 3s ease-in-out infinite; /* เพิ่มลูกเล่นขยับขึ้นลง */
+            animation: heartFloat 3s ease-in-out infinite;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -98,7 +155,7 @@
             50% { transform: translate(-50%, -55%) scale(1.05); }
         }
 
-        .envelope:hover .heart-center {
+        .envelope:hover .heart-center, .envelope:focus-visible .heart-center {
             transform: translate(-50%, -50%) scale(1.2);
         }
 
@@ -108,7 +165,6 @@
             stroke-linejoin: round;
         }
 
-        /* การ์ดด้านในที่ซ่อนอยู่ */
         .card-inside {
             position: absolute;
             top: 10px; left: 5%;
@@ -119,10 +175,9 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: transform 0.8s ease;
             padding: 10px;
-            text-align: Top;
+            text-align: center;
         }
 
-        /* สถานะเมื่อเปิดซอง */
         .envelope.open .flap { transform: rotateX(180deg); z-index: 1; }
         .envelope.open .card-inside { transform: translateY(-100px); }
         .envelope.open .heart-center { opacity: 0; }
@@ -142,26 +197,39 @@
             60% {transform: translateY(-5px);}
         }
 
-        /* --- Main Content (Hidden Initially) --- 000*/
+        /* --- Main Content --- */
         #main-app {
             opacity: 0;
             transition: opacity 1.5s ease-in;
             display: none;
         }
 
-        body {
-            font-family: 'Mali', cursive;
-            background-color: var(--bg-cream);
-            color: var(--text-gray);
-
-            line-height: 1.6;
+        /* --- Floating hearts ambience --- */
+        #heart-field {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .floating-heart {
+            position: absolute;
+            bottom: -40px;
+            font-size: 1.2rem;
+            opacity: 0.55;
+            animation: floatUp linear forwards;
+            will-change: transform;
+        }
+        @keyframes floatUp {
+            to { transform: translateY(-110vh) translateX(var(--drift, 20px)) rotate(20deg); opacity: 0; }
         }
 
         /* --- Hero Section --- */
         .hero {
+            position: relative;
             height: 100vh;
-            background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), 
-                        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80'); /* เปลี่ยนเป็นรูปจริงของคุณ */
+            background: linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.35)),
+                        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=70');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -181,14 +249,62 @@
 
         .hero p { font-size: 1.5rem; margin-top: 10px; color: #777; }
 
+        .scroll-cue {
+            position: absolute;
+            bottom: 28px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--deep-pink-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            animation: bounce 2.4s infinite;
+        }
+
+        /* --- Reveal on scroll --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section { padding: 80px 20px; text-align: center; max-width: 1000px; margin: auto; position: relative; z-index: 2; }
+        .section h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+            font-size: 1.7rem;
+            color: var(--deep-pink-dark);
+            margin-bottom: 8px;
+        }
+        /* Cute Thai script for the friendlier, more playful headings */
+        .section h3.cute-heading {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+            font-size: 2.6rem;
+            line-height: 1.3;
+        }
+        .section .eyebrow {
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.75rem;
+            color: var(--deep-pink);
+            margin-bottom: 6px;
+        }
+
         /* --- Countdown --- */
-        .section { padding: 80px 20px; text-align: center; max-width: 1000px; margin: auto; }
-        
         #timer {
             display: flex;
             justify-content: center;
             gap: 20px;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
 
         .time-box {
@@ -199,38 +315,87 @@
             min-width: 80px;
         }
 
-        .time-box span { font-size: 2rem; font-weight: bold; color: var(--deep-pink); display: block; }
+        .time-box span { font-size: 2rem; font-weight: bold; color: var(--deep-pink); display: block; font-variant-numeric: tabular-nums; }
 
-        /* --- Gallery --- */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+        .cta-row {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
             margin-top: 30px;
         }
 
-        .gallery-item {
-            height: 300px;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            border-radius: 10px;
+        .btn {
+            font-family: 'Mali', cursive;
+            font-size: 1rem;
+            border: none;
             cursor: pointer;
-            transition: transform 0.3s;
+            padding: 12px 24px;
+            border-radius: 30px;
+            background: var(--deep-pink);
+            color: white;
+            box-shadow: 0 6px 16px rgba(255,177,177,0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,177,177,0.5); }
+
+        /* --- Gallery: mosaic layout --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 90px;
+            gap: 12px;
+            margin-top: 30px;
         }
 
-        .gallery-item::after {
+        .gallery-cell {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(255,177,177,0.18);
+        }
+        .gallery-cell::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3));
+            background: linear-gradient(180deg, rgba(255,255,255,0) 55%, rgba(0,0,0,0.28) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
             pointer-events: none;
         }
+        .gallery-cell:hover::after { opacity: 1; }
 
-        .gallery-item:hover { transform: scale(1.03); }
+        .cell-1 { grid-column: span 2; grid-row: span 3; }
+        .cell-2 { grid-column: span 2; grid-row: span 2; }
+        .cell-3 { grid-column: span 1; grid-row: span 2; }
+        .cell-4 { grid-column: span 1; grid-row: span 2; }
+        .cell-5 { grid-column: span 1; grid-row: span 2; }
+        .cell-6 { grid-column: span 3; grid-row: span 2; }
+
+        .gallery-item {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+            display: block;
+            background: var(--soft-pink);
+        }
+
+        .gallery-cell:hover .gallery-item, .gallery-item:focus-visible { transform: scale(1.08); }
+
+        @media (max-width: 768px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px; }
+            .cell-1, .cell-6 { grid-column: span 2; grid-row: span 2; }
+            .cell-2, .cell-3, .cell-4, .cell-5 { grid-column: span 1; grid-row: span 2; }
+        }
 
         /* --- Timeline --- */
-        .timeline { position: relative; max-width: 800px; margin: 40px auto; /*text-align: left;*/ }
+        .timeline { position: relative; max-width: 800px; margin: 40px auto; }
         .timeline::after {
             content: '';
             position: absolute;
@@ -240,52 +405,42 @@
             margin-left: -2px;
         }
 
-        .timeline-item { padding: 10px 40px; position: relative; width: 50%; /*Add*/ box-sizing: border-box;}
+        .timeline-item { padding: 10px 40px; position: relative; width: 50%; box-sizing: border-box; }
         .timeline-item.left { left: 0; text-align: right; }
-        .timeline-item.right { left: 50%; /*Add*/ text-align: left; }
+        .timeline-item.right { left: 50%; text-align: left; }
         .timeline-item::after {
-            content: ''; 
+            content: '';
             position: absolute;
             width: 32px;
             height: 32px;
             right: -17px;
             top: 12px;
-            background-color: white; 
-            border-radius: 50%; /* ทำเป็นวงกลม */
+            background-color: white;
+            border-radius: 50%;
             border: 2px solid var(--soft-pink);
             z-index: 1;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* เพิ่มเงาเบาๆ ให้ดูมีมิติ */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFB1B1'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
-            background-size: 18px; /* ขนาดของรูปหัวใจด้านใน */
+            background-size: 18px;
             background-repeat: no-repeat;
             background-position: center;
             transition: all 0.3s ease;
         }
-        /* เมื่อเอาเมาส์ไปชี้ที่กล่องข้อความ ให้หัวใจขยายเด้งดึ๋ง */
-        .timeline-item:hover::after {
-            transform: scale(1.2);
-            border-color: var(--deep-pink);
-        }
-        .timeline-item.right::after { left: -17px; }  /* เดิม -12*/
+        .timeline-item:hover::after { transform: scale(1.2); border-color: var(--deep-pink); }
+        .timeline-item.right::after { left: -17px; }
         .timeline-item.left::after { right: -17px; }
 
-        /* แก้ไข Media Query สำหรับมือถือให้ตำแหน่งตรงกัน */
         @media (max-width: 768px) {
-            .timeline-item.right::after {
-                left: -17px !important;
-            }
+            .timeline-item.right::after { left: -17px !important; }
         }
 
-        /* --- Theme --- */
+        /* --- Theme / Dress code --- */
         .theme-box {
-            /* background: var(--rainbow-gradient); */
             padding: 3px;
             border-radius: 20px;
-            /* box-shadow: 0 10px 30px rgba(0,0,0,0.1); */
             position: relative;
             overflow: hidden;
         }
-
         .theme-box::before {
             content: '';
             position: absolute;
@@ -294,12 +449,9 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
+        .theme-box:hover::before { opacity: 0.3; }
 
-        .theme-box:hover::before {
-            opacity: 0.3;
-        }
-
-        .theme-content { 
+        .theme-content {
             background: var(--bg-cream);
             padding: 40px 30px;
             border-radius: 18px;
@@ -308,37 +460,16 @@
             z-index: 1;
         }
 
-        .rainbow-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-            animation: float 3s ease-in-out infinite;
-        }
-
+        .rainbow-icon { font-size: 60px; margin-bottom: 15px; animation: float 3s ease-in-out infinite; }
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
 
-        .theme-content h4 {
-            font-size: 24px;
-            color: #333;
-            margin: 0 0 10px 0;
-            font-weight: 600;
-        }
+        .theme-content h4 { font-size: 24px; color: #333; margin: 0 0 10px 0; font-weight: 600; }
+        .theme-content p { color: #666; font-size: 16px; margin: 0 0 25px 0; line-height: 1.6; }
 
-        .theme-content p {
-            color: #666;
-            font-size: 16px;
-            margin: 0 0 25px 0;
-            line-height: 1.6;
-        }
-
-        .color-palette {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 20px;
-        }
+        .color-palette { display: flex; justify-content: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
 
         .color-dot {
             width: 35px;
@@ -347,34 +478,52 @@
             display: inline-block;
             box-shadow: 0 3px 10px rgba(0,0,0,0.2);
             transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
         }
+        .color-dot:hover { transform: scale(1.2) translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
-        .color-dot:hover {
-            transform: scale(1.2) translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        /* --- Location --- */
+        .map-frame { border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(255,177,177,0.2); }
+
+        /* --- Floating action buttons --- */
+        #fab-row {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 500;
         }
+        .fab {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        .fab:hover { transform: scale(1.08); }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .theme-content {
-                padding: 30px 20px;
-            }
-            
-            .rainbow-icon {
-                font-size: 50px;
-            }
-            
-            .theme-content h4 {
-                font-size: 20px;
-            }
-            
-            .color-dot {
-                width: 28px;
-                height: 28px;
-            }
+            .theme-content { padding: 30px 20px; }
+            .rainbow-icon { font-size: 50px; }
+            .theme-content h4 { font-size: 20px; }
+            .color-dot { width: 28px; height: 28px; }
+            .envelope { width: 280px; height: 180px; }
+            .flap { border-left-width: 140px; border-right-width: 140px; border-top-width: 100px; }
+            .hero h1 { font-size: 3.5rem; }
+            .timeline-item { width: 100%; text-align: left !important; padding-left: 30px; }
+            .timeline::after { left: 10px; }
+            .timeline-item.right { left: 0; }
+            .timeline-item::after { left: -2px !important; }
         }
-
 
         /* --- Modal Lightbox --- */
         #modal {
@@ -385,31 +534,35 @@
             z-index: 1000;
             justify-content: center; align-items: center;
         }
-        #modal img { max-width: 90%; max-height: 80%; border: 5px solid white; }
-
-        @media (max-width: 768px) {
-            .envelope { width: 280px; height: 180px; }
-            .flap { border-left-width: 140px; border-right-width: 140px; border-top-width: 100px; }
-            .hero h1 { font-size: 3.5rem; }
-            .timeline-item { width: 100%; text-align: left !important; padding-left: 30px; }
-            .timeline::after { left: 10px; }
-            .timeline-item.right { left: 0; }
-            .timeline-item::after { left: -2px !important; }
+        #modal img { max-width: 90%; max-height: 80%; border: 5px solid white; border-radius: 4px; }
+        #modal-close {
+            position: absolute;
+            top: 20px; right: 24px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
         }
+
+        footer { text-align: center; padding: 40px; color: #aaa; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
+    <div id="progress-bar"></div>
+
     <div id="welcome-overlay">
         <div class="envelope-glow">
-            <div class="envelope" id="mainEnvelope" onclick="handleOpen()">
+            <div class="envelope" id="mainEnvelope" role="button" tabindex="0" aria-label="เปิดการ์ดเชิญงานแต่งงาน Koy & Best">
                 <div class="flap"></div>
                 <div class="card-inside">
                     <h2 style="font-family:'Dancing Script'; font-size: 1.8rem; color: var(--deep-pink);">Koy & Best</h2>
                     <p style="font-size: 0.8rem; margin-top: 20px;">20.11.2026</p>
                 </div>
                 <div class="heart-center">
-                    <svg viewBox="0 0 32 32" class="heart-svg">
+                    <svg viewBox="0 0 32 32" class="heart-svg" aria-hidden="true">
                         <path d="M16 28.5L14.3 26.8C8.2 21.3 4 17.5 4 12.9C4 9.1 7 6.1 10.8 6.1C13 6.1 15.1 7.1 16.5 8.7C17.9 7.1 20 6.1 22.2 6.1C26 6.1 29 9.1 29 12.9C29 17.5 24.8 21.3 18.7 26.8L17 28.5H16Z" />
                     </svg>
                 </div>
@@ -418,16 +571,23 @@
         <p class="tap-hint">Tap to Open</p>
     </div>
 
+    <div id="heart-field" aria-hidden="true"></div>
+
     <div id="main-app">
         <section class="hero">
             <h1>Koy & Best</h1>
             <h2 style="font-weight: 300;">Saving the Date</h2>
             <h2 style="font-weight: 300;">20 November 2026</h2>
+            <div class="scroll-cue" aria-hidden="true">
+                <span>เลื่อนลงเพื่อดูเพิ่มเติม</span>
+                <span>↓</span>
+            </div>
         </section>
 
-        <section class="section">
-            <h3>นับถอยหลังสู่วันสำคัญ</h3>
-            <div id="timer">
+        <section class="section reveal">
+            <span class="eyebrow">Countdown</span>
+            <h3 class="cute-heading">นับถอยหลังสู่วันสำคัญ</h3>
+            <div id="timer" role="timer" aria-live="off">
                 <div class="time-box"><span id="days">0</span>วัน</div>
                 <div class="time-box"><span id="hours">0</span>ชม.</div>
                 <div class="time-box"><span id="mins">0</span>นาที</div>
@@ -435,110 +595,222 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section reveal">
+            <span class="eyebrow">Memories</span>
             <h3>Pre-Wedding Gallery</h3>
             <div class="gallery-grid">
-                <div class="gallery-item" style="background-image: url('https://i.ibb.co/4wW7nc27/IMG-4064.jpg')" ></div>
-                <div class="gallery-item" style="background-image: url('https://i.ibb.co/4wW7nc27/IMG-4064.jpg')" ></div>
-                <div class="gallery-item" style="background-image: url('https://i.ibb.co/4wW7nc27/IMG-4064.jpg')" ></div>
-                <div class="gallery-item" style="background-image: url('https://i.ibb.co/4wW7nc27/IMG-4064.jpg')" ></div>
-                <div class="gallery-item" style="background-image: url('https://i.ibb.co/4wW7nc27/IMG-4064.jpg')" ></div>
-                <div class="gallery-item" style="background-image: url('https://i.ibb.co/4wW7nc27/IMG-4064.jpg')" ></div>
+                <div class="gallery-cell cell-1"><img class="gallery-item" loading="lazy" decoding="async" src="https://i.ibb.co/4wW7nc27/IMG-4064.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 1" onclick="openModal(this.src)"></div>
+                <div class="gallery-cell cell-2"><img class="gallery-item" loading="lazy" decoding="async" src="https://i.ibb.co/4wW7nc27/IMG-4064.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 2" onclick="openModal(this.src)"></div>
+                <div class="gallery-cell cell-3"><img class="gallery-item" loading="lazy" decoding="async" src="https://i.ibb.co/4wW7nc27/IMG-4064.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 3" onclick="openModal(this.src)"></div>
+                <div class="gallery-cell cell-4"><img class="gallery-item" loading="lazy" decoding="async" src="https://i.ibb.co/4wW7nc27/IMG-4064.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 4" onclick="openModal(this.src)"></div>
+                <div class="gallery-cell cell-5"><img class="gallery-item" loading="lazy" decoding="async" src="https://i.ibb.co/4wW7nc27/IMG-4064.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 5" onclick="openModal(this.src)"></div>
+                <div class="gallery-cell cell-6"><img class="gallery-item" loading="lazy" decoding="async" src="https://i.ibb.co/4wW7nc27/IMG-4064.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 6" onclick="openModal(this.src)"></div>
             </div>
         </section>
 
-        <section class="section">
+        <section class="section reveal">
+            <span class="eyebrow">Our Story</span>
             <h3>Our Love Story</h3>
             <div class="timeline">
                 <div class="timeline-item left"><h4>First Met</h4><p>วันที่เราเจอกันครั้งแรก</p></div>
                 <div class="timeline-item right"><h4>First Date</h4><p>เดทแรกที่จำไม่ลืม</p></div>
-                <div class="timeline-item left"><h4>The Proposal</h4><p>วันที่ตัดสินใจเป็นแฟนกัน</p></div>
+                <div class="timeline-item left"><h4>Became a Couple</h4><p>วันที่ตัดสินใจเป็นแฟนกัน</p></div>
                 <div class="timeline-item right"><h4>The Proposal</h4><p>วันที่ตัดสินใจจะใช้ชีวิตคู่ร่วมกัน</p></div>
             </div>
         </section>
 
-
-        <section class="section">
-            <h3>Dress Code</h3>
+        <section class="section reveal">
+            <span class="eyebrow">Dress Code</span>
+            <h3 class="cute-heading">มาแต่งตัวสนุกกับเรา</h3>
             <div class="theme-box">
                 <div class="theme-content">
-                    <div class="rainbow-icon">🌈</div>
+                    <div class="rainbow-icon" aria-hidden="true">🌈</div>
                     <h4>Rainbow Theme (สายรุ้ง)</h4>
                     <p>มาเติมสีสันให้วันของเราสดใสด้วยกันนะ</p>
                     <div class="color-palette">
-                        <span class="color-dot" style="background: #f8afaf"></span>
-                        <span class="color-dot" style="background: #fdda97"></span>
-                        <span class="color-dot" style="background: #fce9a6"></span>
-                        <span class="color-dot" style="background: #b1e4b7"></span>
-                        <span class="color-dot" style="background: #b2d0fa"></span>
-                        <span class="color-dot" style="background: #dab5f8"></span>
+                        <span class="color-dot" style="background:#f8afaf"></span>
+                        <span class="color-dot" style="background:#fdda97"></span>
+                        <span class="color-dot" style="background:#fce9a6"></span>
+                        <span class="color-dot" style="background:#b1e4b7"></span>
+                        <span class="color-dot" style="background:#b2d0fa"></span>
+                        <span class="color-dot" style="background:#dab5f8"></span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="location" class="section">
+        <section id="location" class="section reveal">
+            <span class="eyebrow">Venue</span>
             <h3>Location & Map</h3>
             <p>Auntie's garden cafe & restaurant</p>
-            <div style="margin: 20px 0;">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4764.538294919375!2d100.50368407586724!3d13.950702792655854!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e2850d86a41129%3A0x6c82021a0f679eff!2sAuntie&#39;s%20garden%20cafe%20%26%20restaurant!5e1!3m2!1sen!2sth!4v1773642137594!5m2!1sen!2sth" width="100%" height="300" style="border:0; border-radius: 15px;" allowfullscreen="" loading="lazy"></iframe>
+            <p style="font-size:0.9rem; color:#888;">8, หมู่ที่ 3 Bang Khu Wat, Mueang Pathum Thani District, Pathum Thani 12000</p>
+            <div class="map-frame" style="margin: 20px 0;">
+                <iframe src="https://www.google.com/maps?q=13.950801710177375,100.50667742097859&z=16&output=embed" width="100%" height="300" style="border:0;" loading="lazy" title="แผนที่ไปยัง Auntie's garden cafe & restaurant" allowfullscreen></iframe>
             </div>
-            <div>
+            <div class="cta-row">
+                <a class="btn" href="https://www.google.com/maps/search/?api=1&query=13.950801710177375,100.50667742097859" target="_blank" rel="noopener">🧭 นำทางด้วย Google Maps</a>
+            </div>
+            <div style="margin-top:24px;">
                 <p>Scan for Navigation</p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://maps.google.com" alt="QR Code Location" style="margin-top:10px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2F%3Fapi%3D1%26query%3D13.950801710177375%2C100.50667742097859" alt="QR Code นำทางไปยังสถานที่จัดงาน" width="150" height="150" loading="lazy" style="margin-top:10px;">
             </div>
         </section>
 
-        <footer style="text-align: center; padding: 40px; color: #aaa; font-size: 0.8rem;">
+        <footer>
             CREATED BY BUCKBEST ❤ FOR KOY & BEST | 20.11.2026
         </footer>
     </div>
 
-    <div id="modal" onclick="this.style.display='none'"><img id="modalImg" src="" alt=""></div>
+    <div id="modal" role="dialog" aria-modal="true" aria-label="ภาพขยาย">
+        <button id="modal-close" aria-label="ปิด">&times;</button>
+        <img id="modalImg" src="" alt="">
+    </div>
+
+    <div id="fab-row">
+        <button class="fab" id="music-toggle" aria-pressed="false" aria-label="เปิด/ปิดเพลงประกอบ" title="เพลงประกอบ">🔈</button>
+    </div>
+
+    <!--
+      เพลงตัวอย่าง: Pachelbel's "Canon in D Major" เรียบเรียงโดย Kevin MacLeod (incompetech.com)
+      ลิขสิทธิ์: Creative Commons BY 4.0 — ใช้ได้ฟรีแต่ต้องเครดิตผู้แต่งถ้าเผยแพร่จริง (https://creativecommons.org/licenses/by/4.0/)
+      แนะนำให้เปลี่ยนเป็นเพลงที่คุณชอบ/มีสิทธิ์ใช้งานจริงก่อนเผยแพร่งานแต่งจริง
+    -->
+    <audio id="bg-music" loop preload="none">
+        <source src="https://www.chosic.com/wp-content/uploads/2020/07/Kevin_MacLeod_-_Canon_in_D_Major.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        // --- การเปิดซองจดหมาย ---
+        // --- การเปิดซองจดหมาย (คลิกหรือกด Enter/Space) ---
         function handleOpen() {
             const env = document.getElementById('mainEnvelope');
             const overlay = document.getElementById('welcome-overlay');
             const app = document.getElementById('main-app');
+            if (env.classList.contains('open')) return;
 
-            env.classList.add('open'); // เปิดซองและดึงการ์ดขึ้น
+            env.classList.add('open');
 
             setTimeout(() => {
                 overlay.style.opacity = '0';
                 overlay.style.transform = 'scale(1.1)';
                 setTimeout(() => {
                     overlay.style.display = 'none';
+                    overlay.setAttribute('aria-hidden', 'true');
                     app.style.display = 'block';
                     setTimeout(() => { app.style.opacity = '1'; }, 50);
+                    startHeartField();
                 }, 1000);
-            }, 1200); // ให้เวลาดูการ์ดแวบนึงก่อนหายไป
+            }, 1200);
+
+            const music = document.getElementById('bg-music');
+            if (music.querySelector('source').src) {
+                music.play().then(() => setMusicState(true)).catch(() => {});
+            }
         }
 
-        // --- Countdown Timer Logic ---
-        const weddingDate = new Date("Nov 20, 2026 15:00:00").getTime();
+        const envelopeEl = document.getElementById('mainEnvelope');
+        envelopeEl.addEventListener('click', handleOpen);
+        envelopeEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleOpen(); }
+        });
 
-        const x = setInterval(function() {
+        // --- Countdown Timer ---
+        const weddingDate = new Date("Nov 20, 2026 15:00:00").getTime();
+        const pad = (n) => String(n).padStart(2, '0');
+
+        const timerInterval = setInterval(function () {
             const now = new Date().getTime();
             const distance = weddingDate - now;
 
-            document.getElementById("days").innerHTML = Math.floor(distance / (1000 * 60 * 60 * 24));
-            document.getElementById("hours").innerHTML = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("mins").innerHTML = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById("secs").innerHTML = Math.floor((distance % (1000 * 60)) / 1000);
-
             if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("timer").innerHTML = "HAPPY WEDDING DAY!";
+                clearInterval(timerInterval);
+                document.getElementById("timer").innerHTML = "HAPPY WEDDING DAY! 🎉";
+                return;
             }
+
+            document.getElementById("days").textContent = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").textContent = pad(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            document.getElementById("mins").textContent = pad(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+            document.getElementById("secs").textContent = pad(Math.floor((distance % (1000 * 60)) / 1000));
         }, 1000);
 
-        // --- Gallery Lightbox Logic ---
-        function openModal(bgImg) {
-            const url = bgImg.replace('url("', '').replace('")', '');
-            document.getElementById("modalImg").src = url;
-            document.getElementById("modal").style.display = "flex";
+        // --- Gallery Lightbox ---
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modalImg');
+        function openModal(src) {
+            modalImg.src = src;
+            modalImg.alt = '';
+            modal.style.display = 'flex';
+            document.getElementById('modal-close').focus();
+        }
+        function closeModal() {
+            modal.style.display = 'none';
+            modalImg.src = '';
+        }
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        document.getElementById('modal-close').addEventListener('click', closeModal);
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+        // --- Scroll reveal ---
+        const revealEls = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        revealEls.forEach(el => observer.observe(el));
+
+        // --- Scroll progress bar ---
+        const progressBar = document.getElementById('progress-bar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            progressBar.style.width = pct + '%';
+        }, { passive: true });
+
+        // --- Background music toggle ---
+        const musicBtn = document.getElementById('music-toggle');
+        const bgMusic = document.getElementById('bg-music');
+        function setMusicState(playing) {
+            musicBtn.setAttribute('aria-pressed', String(playing));
+            musicBtn.textContent = playing ? '🔊' : '🔈';
+        }
+        musicBtn.addEventListener('click', () => {
+            if (!bgMusic.querySelector('source').src) {
+                musicBtn.title = 'ยังไม่ได้ใส่ไฟล์เพลง';
+                return;
+            }
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => setMusicState(true)).catch(() => {});
+            } else {
+                bgMusic.pause();
+                setMusicState(false);
+            }
+        });
+
+        // --- Ambient floating hearts (lightweight, capped, respects reduced motion) ---
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function startHeartField() {
+            if (prefersReducedMotion) return;
+            const field = document.getElementById('heart-field');
+            const symbols = ['💗', '🌸', '🎈'];
+            let count = 0;
+            const maxConcurrent = 6;
+            setInterval(() => {
+                if (count >= maxConcurrent) return;
+                count++;
+                const el = document.createElement('span');
+                el.className = 'floating-heart';
+                el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+                el.style.animationDuration = (8 + Math.random() * 6) + 's';
+                field.appendChild(el);
+                el.addEventListener('animationend', () => { el.remove(); count--; });
+            }, 3000);
         }
     </script>
 </body>

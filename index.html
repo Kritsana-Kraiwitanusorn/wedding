@@ -520,6 +520,78 @@
         /* --- Location --- */
         .map-frame { border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(255,177,177,0.2); }
 
+        /* --- Gift / QR Payment --- */
+        .gift-box {
+            padding: 3px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            max-width: 380px;
+            margin: 30px auto 0;
+        }
+        .gift-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--rainbow-gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .gift-box:hover::before { opacity: 0.3; }
+
+        .gift-content {
+            background: var(--bg-cream);
+            padding: 30px 24px;
+            border-radius: 18px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .gift-content img {
+            width: 100%;
+            max-width: 260px;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(255,177,177,0.25);
+            margin-bottom: 18px;
+        }
+
+        .gift-account {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+            font-family: 'Mali', cursive;
+        }
+
+        .gift-account-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--deep-pink-dark);
+            background: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .copy-btn {
+            font-family: 'Mali', cursive;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            padding: 10px 18px;
+            border-radius: 30px;
+            background: var(--deep-pink);
+            color: white;
+            box-shadow: 0 6px 16px rgba(255,177,177,0.4);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .copy-btn:hover { transform: translateY(-2px); }
+        .copy-btn.copied { background: #9bf6ff; color: #333; }
+
         /* --- Floating action buttons --- */
         #fab-row {
             position: fixed;
@@ -700,9 +772,26 @@
             <div class="cta-row">
                 <a class="btn" href="https://www.google.com/maps/search/?api=1&query=13.950801710177375,100.50667742097859" target="_blank" rel="noopener">🧭 นำทางด้วย Google Maps</a>
             </div>
-            <div style="margin-top:24px;">
+            <!-- <div style="margin-top:24px;">
                 <p>Scan for Navigation</p>
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2F%3Fapi%3D1%26query%3D13.950801710177375%2C100.50667742097859" alt="QR Code นำทางไปยังสถานที่จัดงาน" width="150" height="150" loading="lazy" style="margin-top:10px;">
+            </div> -->
+        </section>
+
+        <section id="gift" class="section reveal">
+            <span class="eyebrow">Wedding Gift</span>
+            <h3 class="cute-heading">ร่วมอวยพรให้เรา</h3>
+            <p>ขอเรียนเชิญร่วมแสดงความยินดีและอวยพรคู่สมรส<br>สามารถสแกน QR หรือโอนผ่านเลขพร้อมเพย์ด้านล่างนี้ได้เลยค่ะ/ครับ</p>
+
+            <div class="gift-box">
+                <div class="gift-content">
+                    <img src="images/qr-promptpay.jpg" alt="QR Code พร้อมเพย์สำหรับโอนเงินร่วมอวยพร" loading="lazy">
+
+                    <div class="gift-account">
+                        <span class="gift-account-number" id="promptpayNumber">061-384-8590</span>
+                        <button class="copy-btn" id="copyPromptpayBtn" type="button">📋 คัดลอกเบอร์</button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -835,6 +924,31 @@
                 setMusicState(false);
             }
         });
+
+        // --- Copy PromptPay number ---
+        const copyBtn = document.getElementById('copyPromptpayBtn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', async () => {
+                const rawNumber = '0613848590'; // เบอร์พร้อมเพย์แบบไม่มีขีด สำหรับคัดลอกไปวางในแอปธนาคาร
+                try {
+                    await navigator.clipboard.writeText(rawNumber);
+                } catch (e) {
+                    // fallback สำหรับเบราว์เซอร์เก่า
+                    const temp = document.createElement('textarea');
+                    temp.value = rawNumber;
+                    document.body.appendChild(temp);
+                    temp.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(temp);
+                }
+                copyBtn.textContent = '✅ คัดลอกแล้ว';
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 คัดลอกเบอร์';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            });
+        }
 
         // --- Ambient floating hearts (lightweight, capped, respects reduced motion) ---
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -29,6 +29,8 @@
             --deep-pink: #FFB1B1;
             --deep-pink-dark: #E88E8E;
             --text-gray: #555;
+            /* รูปพื้นหลังหน้าแรก: เปลี่ยนชื่อไฟล์ตรงนี้ที่เดียว */
+            --hero-image: url('images/IMG-0.jpg');
             --rainbow-gradient: linear-gradient(to right, #ffadad, #ffd6a5, #fdffb6, #caffbf, #9bf6ff, #a0c4ff, #bdb2ff, #ffc6ff);
         }
 
@@ -264,34 +266,51 @@
         .hero {
             position: relative;
             height: 100vh;
-            background: linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.35)),
-                        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=70');
+            height: 100svh;
+            min-height: 520px;
+            background: linear-gradient(rgba(0,0,0,0.12), rgba(0,0,0,0.30)),
+                        var(--hero-image);
             background-size: cover;
-            background-position: center;
+            background-position: 39% 60%;   /* โฟกัสที่คู่บ่าวสาว */
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;    /* มือถือ: ข้อความอยู่ด้านบน (ท้องฟ้า/ทะเล) ไม่บังหน้า */
             align-items: center;
             text-align: center;
-            padding: 20px;
+            padding: 16vh 20px 20px;
+            color: #fff;
         }
 
         .hero h1 {
             font-family: 'Dancing Script', cursive;
             font-size: 5rem;
-            color: var(--deep-pink);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            line-height: 1.1;
+            color: #fff;
+            text-shadow: 0 2px 14px rgba(0,0,0,0.45);
         }
+        .hero h2 { color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
 
-        .hero p { font-size: 1.5rem; margin-top: 10px; color: #777; }
+        /* คอม/แท็บเล็ตแนวนอน: ย้ายข้อความไปฝั่งขวา (ฝั่งทะเล) คู่บ่าวสาวอยู่ฝั่งซ้าย */
+        @media (min-width: 900px) and (orientation: landscape) {
+            .hero {
+                background-position: center 48%;
+                justify-content: center;
+                align-items: flex-end;
+                padding: 20px 8vw 20px 20px;
+            }
+            .hero > :not(.scroll-cue) { width: min(42vw, 520px); }
+        }
 
         .scroll-cue {
             position: absolute;
             bottom: 28px;
+            left: 0;
+            right: 0;
             font-size: 0.8rem;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--deep-pink-dark);
+            color: #fff;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -379,20 +398,26 @@
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,177,177,0.5); }
 
-        /* --- Gallery: mosaic layout --- */
+        /* --- Gallery: masonry (คงสัดส่วนจริงของแต่ละรูป ไม่ครอป) --- */
+        .gallery-section { max-width: 1100px; }
+
         .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 90px;
-            gap: 12px;
-            margin-top: 30px;
+            column-count: 4;
+            column-gap: 16px;
+            margin-top: 36px;
         }
 
         .gallery-cell {
             position: relative;
+            margin: 0 0 16px;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(255,177,177,0.18);
+            break-inside: avoid;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            background: linear-gradient(135deg, var(--soft-pink), #fff3e6);
+            box-shadow: 0 10px 24px rgba(232,142,142,0.20);
+            transition: box-shadow 0.3s ease;
         }
         .gallery-cell::after {
             content: '';
@@ -403,31 +428,47 @@
             transition: opacity 0.3s ease;
             pointer-events: none;
         }
+        .gallery-cell:hover { box-shadow: 0 14px 30px rgba(232,142,142,0.35); }
         .gallery-cell:hover::after { opacity: 1; }
 
-        .cell-1 { grid-column: span 2; grid-row: span 3; }
-        .cell-2 { grid-column: span 2; grid-row: span 2; }
-        .cell-3 { grid-column: span 1; grid-row: span 2; }
-        .cell-4 { grid-column: span 1; grid-row: span 2; }
-        .cell-5 { grid-column: span 1; grid-row: span 2; }
-        .cell-6 { grid-column: span 3; grid-row: span 2; }
+        .gallery-btn {
+            display: block;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: none;
+            cursor: pointer;
+            font: inherit;
+            line-height: 0;
+        }
+        .gallery-btn:focus-visible { outline-offset: -4px; }
 
         .gallery-item {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform 0.5s ease;
             display: block;
-            background: var(--soft-pink);
+            width: 100%;
+            height: auto;
+            transition: transform 0.6s ease;
         }
+        .gallery-cell:hover .gallery-item,
+        .gallery-btn:focus-visible .gallery-item { transform: scale(1.05); }
 
-        .gallery-cell:hover .gallery-item, .gallery-item:focus-visible { transform: scale(1.08); }
+        /* ถ้าไฟล์รูปไม่มี จะซ่อนช่องนั้นไป (ไม่แสดงไอคอนรูปเสีย) */
+        .gallery-cell.is-missing { display: none; }
 
-        @media (max-width: 768px) {
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px; }
-            .cell-1, .cell-6 { grid-column: span 2; grid-row: span 2; }
-            .cell-2, .cell-3, .cell-4, .cell-5 { grid-column: span 1; grid-row: span 2; }
+        /* JS จัดคอลัมน์ให้ความสูงสมดุล (ถ้า JS ไม่ทำงานจะใช้ CSS columns ด้านบนแทน) */
+        .gallery-grid.is-masonry { display: flex; column-count: auto; gap: 16px; align-items: flex-start; }
+        .gallery-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+        .gallery-grid.is-masonry .gallery-cell { margin: 0; }
+
+        @media (max-width: 900px) {
+            .gallery-grid { column-count: 3; column-gap: 14px; }
+            .gallery-cell { margin-bottom: 14px; }
+            .gallery-grid.is-masonry, .gallery-col { gap: 14px; }
+        }
+        @media (max-width: 600px) {
+            .gallery-grid { column-count: 2; column-gap: 10px; }
+            .gallery-cell { margin-bottom: 10px; border-radius: 12px; }
+            .gallery-grid.is-masonry, .gallery-col { gap: 10px; }
         }
 
         /* --- Timeline --- */
@@ -637,21 +678,64 @@
         #modal {
             display: none;
             position: fixed;
-            top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
-            justify-content: center; align-items: center;
+            inset: 0;
+            background: rgba(20,12,12,0.94);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+            touch-action: pan-y;
         }
-        #modal img { max-width: 90%; max-height: 80%; border: 5px solid white; border-radius: 4px; }
+        #modal img {
+            max-width: 92vw;
+            max-height: 82vh;
+            object-fit: contain;
+            border: 4px solid white;
+            border-radius: 6px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
         #modal-close {
             position: absolute;
-            top: 20px; right: 24px;
-            background: none;
+            top: 14px; right: 18px;
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.12);
             border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.8rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px; height: 48px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
             color: white;
             font-size: 2rem;
             line-height: 1;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-nav:hover, #modal-close:hover { background: rgba(255,255,255,0.3); }
+        #modal-prev { left: 18px; }
+        #modal-next { right: 18px; }
+        #modal-counter {
+            position: absolute;
+            bottom: 22px;
+            left: 0; right: 0;
+            text-align: center;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+        @media (max-width: 600px) {
+            .modal-nav { width: 40px; height: 40px; font-size: 1.6rem; background: rgba(0,0,0,0.35); }
+            #modal-prev { left: 8px; }
+            #modal-next { right: 8px; }
+            #modal img { max-width: 96vw; border-width: 3px; }
         }
 
         footer { text-align: center; padding: 40px; color: #aaa; font-size: 0.8rem; }
@@ -717,16 +801,22 @@
             </div>
         </section>
 
-        <section class="section reveal">
+        <section class="section gallery-section reveal">
             <span class="eyebrow">Memories</span>
             <h3>Pre-Wedding Gallery</h3>
-            <div class="gallery-grid">
-                <div class="gallery-cell cell-1"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-1.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 1" onclick="openModal(this.src)"></div>
-                <div class="gallery-cell cell-2"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-2.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 2" onclick="openModal(this.src)"></div>
-                <div class="gallery-cell cell-3"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-3.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 3" onclick="openModal(this.src)"></div>
-                <div class="gallery-cell cell-4"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-4.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 4" onclick="openModal(this.src)"></div>
-                <div class="gallery-cell cell-5"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-5.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 5" onclick="openModal(this.src)"></div>
-                <div class="gallery-cell cell-6"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-6.jpg" alt="ภาพพรีเวดดิ้งของ Koy และ Best 6" onclick="openModal(this.src)"></div>
+            <div class="gallery-grid" id="galleryGrid">
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 1"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-1.jpg" width="1046" height="1566" alt="ภาพพรีเวดดิ้งของ Koy และ Best 1" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 2"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-2.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 2" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 3"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-3.jpg" width="1400" height="2494" alt="ภาพพรีเวดดิ้งของ Koy และ Best 3" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 4"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-4.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 4" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 5"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-5.jpg" width="1400" height="2126" alt="ภาพพรีเวดดิ้งของ Koy และ Best 5" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 6"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-6.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 6" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 7"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-7.jpg" width="1400" height="2098" alt="ภาพพรีเวดดิ้งของ Koy และ Best 7" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 8"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-8.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 8" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 9"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-9.jpg" width="1046" height="1566" alt="ภาพพรีเวดดิ้งของ Koy และ Best 9" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 10"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-10.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 10" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 11"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-11.jpg" width="1400" height="2098" alt="ภาพพรีเวดดิ้งของ Koy และ Best 11" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 12"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-12.jpg" width="1179" height="2088" alt="ภาพพรีเวดดิ้งของ Koy และ Best 12" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
             </div>
         </section>
 
@@ -800,9 +890,12 @@
         </footer>
     </div>
 
-    <div id="modal" role="dialog" aria-modal="true" aria-label="ภาพขยาย">
+    <div id="modal" role="dialog" aria-modal="true" aria-label="แกลเลอรี่ภาพ">
         <button id="modal-close" aria-label="ปิด">&times;</button>
+        <button class="modal-nav" id="modal-prev" aria-label="ภาพก่อนหน้า">&#8249;</button>
         <img id="modalImg" src="" alt="">
+        <button class="modal-nav" id="modal-next" aria-label="ภาพถัดไป">&#8250;</button>
+        <div id="modal-counter" aria-live="polite"></div>
     </div>
 
     <div id="fab-row">
@@ -867,22 +960,129 @@
             document.getElementById("secs").textContent = pad(Math.floor((distance % (1000 * 60)) / 1000));
         }, 1000);
 
-        // --- Gallery Lightbox ---
+        // --- Gallery masonry: แบ่งรูปเข้าคอลัมน์ให้ความสูงใกล้เคียงกัน (ไม่ครอปรูป) ---
+        const galleryGrid = document.getElementById('galleryGrid');
+        const galleryCells = Array.from(galleryGrid.children);   // เรียงตามลำดับรูป (ใช้กับ lightbox)
+        const cellRatio = (c) => {
+            const im = c.querySelector('img');
+            return (+im.getAttribute('height')) / (+im.getAttribute('width'));
+        };
+        function colCountForWidth() {
+            const w = window.innerWidth;
+            return w <= 600 ? 2 : (w <= 900 ? 3 : 4);
+        }
+        function balanceColumns(n) {
+            const items = galleryCells.map((c, i) => ({ c, i, r: cellRatio(c) }));
+            const cols = Array.from({ length: n }, () => []);
+            const sum = (col) => col.reduce((t, x) => t + x.r, 0);
+            const spread = () => { const h = cols.map(sum); return Math.max(...h) - Math.min(...h); };
+            items.forEach(it => {                                  // 1) greedy: ใส่คอลัมน์ที่สั้นที่สุด
+                let k = 0, best = Infinity;
+                cols.forEach((col, j) => { const h = sum(col); if (h < best) { best = h; k = j; } });
+                cols[k].push(it);
+            });
+            for (let pass = 0; pass < 40; pass++) {                // 2) ปรับปรุง: ย้าย/สลับ ถ้าทำให้สมดุลขึ้น
+                let improved = false, cur = spread();
+                for (let a = 0; a < n; a++) for (let b = 0; b < n; b++) {
+                    if (a === b) continue;
+                    for (let x = 0; x < cols[a].length; x++) {
+                        if (cols[a].length > 1) {                  // ย้าย
+                            const it = cols[a].splice(x, 1)[0]; cols[b].push(it);
+                            const s2 = spread();
+                            if (s2 < cur - 1e-6) { cur = s2; improved = true; x--; continue; }
+                            cols[b].pop(); cols[a].splice(x, 0, it);
+                        }
+                        for (let y = 0; y < cols[b].length; y++) { // สลับ
+                            const p = cols[a][x], q = cols[b][y];
+                            cols[a][x] = q; cols[b][y] = p;
+                            const s2 = spread();
+                            if (s2 < cur - 1e-6) { cur = s2; improved = true; continue; }
+                            cols[a][x] = p; cols[b][y] = q;
+                        }
+                    }
+                }
+                if (!improved) break;
+            }
+            return cols.map(col => col.sort((u, v) => u.i - v.i).map(x => x.c));
+        }
+        let currentCols = 0;
+        function layoutGallery() {
+            const n = colCountForWidth();
+            if (n === currentCols) return;
+            currentCols = n;
+            galleryGrid.textContent = '';
+            balanceColumns(n).forEach(list => {
+                const col = document.createElement('div');
+                col.className = 'gallery-col';
+                list.forEach(c => col.appendChild(c));
+                galleryGrid.appendChild(col);
+            });
+            galleryGrid.classList.add('is-masonry');
+        }
+        layoutGallery();
+        let resizeTimer;
+        window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(layoutGallery, 150); });
+
+        // --- Gallery Lightbox (ก่อนหน้า/ถัดไป, ปุ่มลูกศร, ปัดซ้ายขวาบนมือถือ) ---
         const modal = document.getElementById('modal');
         const modalImg = document.getElementById('modalImg');
-        function openModal(src) {
-            modalImg.src = src;
-            modalImg.alt = '';
+        const modalCounter = document.getElementById('modal-counter');
+        let galleryImgs = [];
+        let currentIdx = 0;
+        let lastFocused = null;
+
+        function showImage(i) {
+            if (!galleryImgs.length) return;
+            currentIdx = (i + galleryImgs.length) % galleryImgs.length;
+            const img = galleryImgs[currentIdx];
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            modalCounter.textContent = (currentIdx + 1) + ' / ' + galleryImgs.length;
+            // preload ภาพข้างเคียงให้เลื่อนลื่นขึ้น
+            [currentIdx + 1, currentIdx - 1].forEach(k => {
+                const n = galleryImgs[(k + galleryImgs.length) % galleryImgs.length];
+                if (n) new Image().src = n.src;
+            });
+        }
+        function openGallery(cell) {
+            if (cell.classList.contains('is-missing')) return;
+            galleryImgs = galleryCells.filter(c => !c.classList.contains('is-missing')).map(c => c.querySelector('.gallery-item'));
+            const idx = galleryImgs.indexOf(cell.querySelector('.gallery-item'));
+            lastFocused = document.activeElement;
+            showImage(idx < 0 ? 0 : idx);
             modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
             document.getElementById('modal-close').focus();
         }
         function closeModal() {
             modal.style.display = 'none';
             modalImg.src = '';
+            document.body.style.overflow = '';
+            if (lastFocused) lastFocused.focus();
         }
+        document.getElementById('galleryGrid').addEventListener('click', (e) => {
+            const cell = e.target.closest('.gallery-cell');
+            if (cell) openGallery(cell);
+        });
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
         document.getElementById('modal-close').addEventListener('click', closeModal);
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+        document.getElementById('modal-prev').addEventListener('click', () => showImage(currentIdx - 1));
+        document.getElementById('modal-next').addEventListener('click', () => showImage(currentIdx + 1));
+        document.addEventListener('keydown', (e) => {
+            if (modal.style.display !== 'flex') return;
+            if (e.key === 'Escape') closeModal();
+            else if (e.key === 'ArrowLeft') showImage(currentIdx - 1);
+            else if (e.key === 'ArrowRight') showImage(currentIdx + 1);
+        });
+        // swipe บนมือถือ
+        let touchStartX = null;
+        modal.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+        modal.addEventListener('touchend', (e) => {
+            if (touchStartX === null) return;
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            touchStartX = null;
+            if (Math.abs(dx) > 50) showImage(currentIdx + (dx < 0 ? 1 : -1));
+        }, { passive: true });
 
         // --- Scroll reveal ---
         const revealEls = document.querySelectorAll('.reveal');

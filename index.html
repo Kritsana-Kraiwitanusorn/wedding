@@ -285,10 +285,10 @@
             font-family: 'Dancing Script', cursive;
             font-size: 5rem;
             line-height: 1.1;
-            color: #fff;
+            color: var(--soft-pink);
             text-shadow: 0 2px 14px rgba(0,0,0,0.45);
         }
-        .hero h2 { color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
+        .hero h2 { color: var(--soft-pink); text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
 
         /* คอม/แท็บเล็ตแนวนอน: ย้ายข้อความไปฝั่งขวา (ฝั่งทะเล) คู่บ่าวสาวอยู่ฝั่งซ้าย */
         @media (min-width: 900px) and (orientation: landscape) {
@@ -341,7 +341,7 @@
         .section h3.cute-heading {
             font-family: 'Mali', cursive;
             font-weight: 700;
-            font-size: 2.6rem;
+            font-size: 1.7rem;
             line-height: 1.3;
         }
         .section .eyebrow {
@@ -398,77 +398,116 @@
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,177,177,0.5); }
 
-        /* --- Gallery: masonry (คงสัดส่วนจริงของแต่ละรูป ไม่ครอป) --- */
-        .gallery-section { max-width: 1100px; }
+        /* --- Gallery: สไลด์แนวนอน (ปัดดู) --- */
+        .gallery-section { max-width: none; padding-left: 0; padding-right: 0; --gpad: max(20px, calc((100% - 1100px) / 2)); }
+        .gallery-carousel { position: relative; margin-top: 28px; }
 
-        .gallery-grid {
-            column-count: 4;
-            column-gap: 16px;
-            margin-top: 36px;
+        .gallery-track {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 6px var(--gpad) 20px;
+            scroll-padding-inline: var(--gpad);
+            cursor: grab;
+            text-align: left;
         }
+        .gallery-track::-webkit-scrollbar { display: none; }
+        .gallery-track.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
+        .gallery-track:focus-visible { outline: 2px solid var(--deep-pink); outline-offset: -2px; border-radius: 12px; }
 
         .gallery-cell {
             position: relative;
-            margin: 0 0 16px;
+            flex: 0 0 auto;
+            height: clamp(320px, min(62vh, 112vw), 560px);
+            aspect-ratio: var(--ar, 3 / 4);
+            margin: 0;
             border-radius: 16px;
             overflow: hidden;
-            break-inside: avoid;
-            -webkit-column-break-inside: avoid;
-            page-break-inside: avoid;
+            scroll-snap-align: start;
             background: linear-gradient(135deg, var(--soft-pink), #fff3e6);
-            box-shadow: 0 10px 24px rgba(232,142,142,0.20);
-            transition: box-shadow 0.3s ease;
+            box-shadow: 0 10px 24px rgba(232,142,142,0.22);
         }
         .gallery-cell::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0) 55%, rgba(0,0,0,0.28) 100%);
+            background: linear-gradient(180deg, rgba(255,255,255,0) 60%, rgba(0,0,0,0.25) 100%);
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
         }
-        .gallery-cell:hover { box-shadow: 0 14px 30px rgba(232,142,142,0.35); }
         .gallery-cell:hover::after { opacity: 1; }
-
         .gallery-btn {
             display: block;
             width: 100%;
+            height: 100%;
             padding: 0;
             border: 0;
             background: none;
-            cursor: pointer;
-            font: inherit;
+            cursor: inherit;
             line-height: 0;
         }
-        .gallery-btn:focus-visible { outline-offset: -4px; }
-
+        .gallery-btn:focus-visible { outline: 3px solid var(--deep-pink); outline-offset: -4px; }
         .gallery-item {
             display: block;
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
+            -webkit-user-drag: none;
+            user-select: none;
             transition: transform 0.6s ease;
         }
-        .gallery-cell:hover .gallery-item,
-        .gallery-btn:focus-visible .gallery-item { transform: scale(1.05); }
-
-        /* ถ้าไฟล์รูปไม่มี จะซ่อนช่องนั้นไป (ไม่แสดงไอคอนรูปเสีย) */
+        .gallery-cell:hover .gallery-item { transform: scale(1.04); }
         .gallery-cell.is-missing { display: none; }
 
-        /* JS จัดคอลัมน์ให้ความสูงสมดุล (ถ้า JS ไม่ทำงานจะใช้ CSS columns ด้านบนแทน) */
-        .gallery-grid.is-masonry { display: flex; column-count: auto; gap: 16px; align-items: flex-start; }
-        .gallery-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
-        .gallery-grid.is-masonry .gallery-cell { margin: 0; }
-
-        @media (max-width: 900px) {
-            .gallery-grid { column-count: 3; column-gap: 14px; }
-            .gallery-cell { margin-bottom: 14px; }
-            .gallery-grid.is-masonry, .gallery-col { gap: 14px; }
+        /* ลูกศร (เฉพาะอุปกรณ์ที่มีเมาส์) */
+        .gallery-arrow {
+            display: none;
+            position: absolute;
+            top: calc(50% - 10px);
+            transform: translateY(-50%);
+            width: 46px; height: 46px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.92);
+            color: var(--deep-pink-dark);
+            font-size: 1.7rem;
+            line-height: 1;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+            cursor: pointer;
+            z-index: 3;
+            transition: opacity 0.2s, transform 0.2s;
         }
+        .gallery-arrow:hover { transform: translateY(-50%) scale(1.08); }
+        .gallery-arrow[disabled] { opacity: 0; pointer-events: none; }
+        #gallery-prev { left: 16px; }
+        #gallery-next { right: 16px; }
+        @media (hover: hover) and (pointer: fine) { .gallery-arrow { display: block; } }
+
+        /* ตัวนับ + แถบความคืบหน้า */
+        .gallery-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 4px;
+            color: var(--deep-pink-dark);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        .gallery-progress { width: 120px; height: 4px; border-radius: 4px; background: rgba(232,142,142,0.25); overflow: hidden; }
+        .gallery-progress > span { display: block; height: 100%; width: 10%; border-radius: 4px; background: var(--deep-pink); transition: width 0.15s linear; }
+        .gallery-hint { margin-top: 10px; font-size: 0.85rem; color: var(--deep-pink); transition: opacity 0.4s; }
+        .gallery-hint.is-hidden { opacity: 0; }
+        @media (hover: hover) and (pointer: fine) { .gallery-hint { display: none; } }
+
         @media (max-width: 600px) {
-            .gallery-grid { column-count: 2; column-gap: 10px; }
-            .gallery-cell { margin-bottom: 10px; border-radius: 12px; }
-            .gallery-grid.is-masonry, .gallery-col { gap: 10px; }
+            .gallery-track { gap: 10px; }
+            .gallery-cell { border-radius: 12px; }
         }
 
         /* --- Timeline --- */
@@ -804,20 +843,26 @@
         <section class="section gallery-section reveal">
             <span class="eyebrow">Memories</span>
             <h3>Pre-Wedding Gallery</h3>
-            <div class="gallery-grid" id="galleryGrid">
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 1"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-1.jpg" width="1046" height="1566" alt="ภาพพรีเวดดิ้งของ Koy และ Best 1" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 2"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-2.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 2" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 3"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-3.jpg" width="1400" height="2494" alt="ภาพพรีเวดดิ้งของ Koy และ Best 3" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 4"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-4.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 4" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 5"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-5.jpg" width="1400" height="2126" alt="ภาพพรีเวดดิ้งของ Koy และ Best 5" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 6"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-6.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 6" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 7"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-7.jpg" width="1400" height="2098" alt="ภาพพรีเวดดิ้งของ Koy และ Best 7" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 8"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-8.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 8" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 9"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-9.jpg" width="1046" height="1566" alt="ภาพพรีเวดดิ้งของ Koy และ Best 9" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 10"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-10.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 10" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 11"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-11.jpg" width="1400" height="2098" alt="ภาพพรีเวดดิ้งของ Koy และ Best 11" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
-                <figure class="gallery-cell"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 12"><img class="gallery-item" loading="lazy" decoding="async" src="images/IMG-12.jpg" width="1179" height="2088" alt="ภาพพรีเวดดิ้งของ Koy และ Best 12" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+            <div class="gallery-carousel">
+                <button type="button" class="gallery-arrow" id="gallery-prev" aria-label="ภาพก่อนหน้า">&#8249;</button>
+                <button type="button" class="gallery-arrow" id="gallery-next" aria-label="ภาพถัดไป">&#8250;</button>
+                <div class="gallery-track" id="galleryGrid" tabindex="0" role="region" aria-label="แกลเลอรี่ภาพพรีเวดดิ้ง เลื่อนซ้ายขวาเพื่อดูรูป">
+                    <figure class="gallery-cell" style="--ar:1046 / 1566"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 1"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-1.jpg" data-full="images/IMG-1.jpg" width="1046" height="1566" alt="ภาพพรีเวดดิ้งของ Koy และ Best 1" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1400 / 1867"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 2"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-2.jpg" data-full="images/IMG-2.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 2" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1400 / 2494"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 3"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-3.jpg" data-full="images/IMG-3.jpg" width="1400" height="2494" alt="ภาพพรีเวดดิ้งของ Koy และ Best 3" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1400 / 1867"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 4"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-4.jpg" data-full="images/IMG-4.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 4" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1400 / 2126"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 5"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-5.jpg" data-full="images/IMG-5.jpg" width="1400" height="2126" alt="ภาพพรีเวดดิ้งของ Koy และ Best 5" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1400 / 1867"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 6"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-6.jpg" data-full="images/IMG-6.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 6" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1400 / 2098"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 7"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-7.jpg" data-full="images/IMG-7.jpg" width="1400" height="2098" alt="ภาพพรีเวดดิ้งของ Koy และ Best 7" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1400 / 1867"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 8"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-8.jpg" data-full="images/IMG-8.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 8" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1046 / 1566"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 9"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-9.jpg" data-full="images/IMG-9.jpg" width="1046" height="1566" alt="ภาพพรีเวดดิ้งของ Koy และ Best 9" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1400 / 1867"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 10"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-10.jpg" data-full="images/IMG-10.jpg" width="1400" height="1867" alt="ภาพพรีเวดดิ้งของ Koy และ Best 10" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1400 / 2098"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 11"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-11.jpg" data-full="images/IMG-11.jpg" width="1400" height="2098" alt="ภาพพรีเวดดิ้งของ Koy และ Best 11" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                    <figure class="gallery-cell" style="--ar:1179 / 2088"><button type="button" class="gallery-btn" aria-label="ขยายภาพที่ 12"><img class="gallery-item" loading="lazy" decoding="async" src="images/thumbs/IMG-12.jpg" data-full="images/IMG-12.jpg" width="1179" height="2088" alt="ภาพพรีเวดดิ้งของ Koy และ Best 12" draggable="false" onerror="this.closest('.gallery-cell').classList.add('is-missing')"></button></figure>
+                </div>
             </div>
+            <div class="gallery-meta"><span id="gallery-count"></span><div class="gallery-progress"><span id="gallery-bar"></span></div></div>
+            <p class="gallery-hint" id="gallery-hint">ปัดซ้าย–ขวาเพื่อดูรูปต่อ &#8594;</p>
         </section>
 
         <section class="section reveal">
@@ -862,16 +907,12 @@
             <div class="cta-row">
                 <a class="btn" href="https://www.google.com/maps/search/?api=1&query=13.950801710177375,100.50667742097859" target="_blank" rel="noopener">🧭 นำทางด้วย Google Maps</a>
             </div>
-            <!-- <div style="margin-top:24px;">
-                <p>Scan for Navigation</p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2F%3Fapi%3D1%26query%3D13.950801710177375%2C100.50667742097859" alt="QR Code นำทางไปยังสถานที่จัดงาน" width="150" height="150" loading="lazy" style="margin-top:10px;">
-            </div> -->
         </section>
 
         <section id="gift" class="section reveal">
             <span class="eyebrow">Wedding Gift</span>
             <h3 class="cute-heading">ร่วมอวยพรให้เรา</h3>
-            <p>ขอเรียนเชิญร่วมแสดงความยินดีและอวยพรคู่สมรส<br>สามารถสแกน QR หรือโอนผ่านเลขพร้อมเพย์ด้านล่างนี้ได้เลยค่ะ/ครับ</p>
+            <p>ขอเรียนเชิญร่วมแสดงความยินดีและอวยพรคู่สมรส<br>สามารถสแกน QR หรือโอนผ่านเลขพร้อมเพย์ด้านล่างนี้ได้เลยครับ ^^</p>
 
             <div class="gift-box">
                 <div class="gift-content">
@@ -960,68 +1001,63 @@
             document.getElementById("secs").textContent = pad(Math.floor((distance % (1000 * 60)) / 1000));
         }, 1000);
 
-        // --- Gallery masonry: แบ่งรูปเข้าคอลัมน์ให้ความสูงใกล้เคียงกัน (ไม่ครอปรูป) ---
-        const galleryGrid = document.getElementById('galleryGrid');
-        const galleryCells = Array.from(galleryGrid.children);   // เรียงตามลำดับรูป (ใช้กับ lightbox)
-        const cellRatio = (c) => {
-            const im = c.querySelector('img');
-            return (+im.getAttribute('height')) / (+im.getAttribute('width'));
-        };
-        function colCountForWidth() {
-            const w = window.innerWidth;
-            return w <= 600 ? 2 : (w <= 900 ? 3 : 4);
-        }
-        function balanceColumns(n) {
-            const items = galleryCells.map((c, i) => ({ c, i, r: cellRatio(c) }));
-            const cols = Array.from({ length: n }, () => []);
-            const sum = (col) => col.reduce((t, x) => t + x.r, 0);
-            const spread = () => { const h = cols.map(sum); return Math.max(...h) - Math.min(...h); };
-            items.forEach(it => {                                  // 1) greedy: ใส่คอลัมน์ที่สั้นที่สุด
-                let k = 0, best = Infinity;
-                cols.forEach((col, j) => { const h = sum(col); if (h < best) { best = h; k = j; } });
-                cols[k].push(it);
-            });
-            for (let pass = 0; pass < 40; pass++) {                // 2) ปรับปรุง: ย้าย/สลับ ถ้าทำให้สมดุลขึ้น
-                let improved = false, cur = spread();
-                for (let a = 0; a < n; a++) for (let b = 0; b < n; b++) {
-                    if (a === b) continue;
-                    for (let x = 0; x < cols[a].length; x++) {
-                        if (cols[a].length > 1) {                  // ย้าย
-                            const it = cols[a].splice(x, 1)[0]; cols[b].push(it);
-                            const s2 = spread();
-                            if (s2 < cur - 1e-6) { cur = s2; improved = true; x--; continue; }
-                            cols[b].pop(); cols[a].splice(x, 0, it);
-                        }
-                        for (let y = 0; y < cols[b].length; y++) { // สลับ
-                            const p = cols[a][x], q = cols[b][y];
-                            cols[a][x] = q; cols[b][y] = p;
-                            const s2 = spread();
-                            if (s2 < cur - 1e-6) { cur = s2; improved = true; continue; }
-                            cols[a][x] = p; cols[b][y] = q;
-                        }
-                    }
-                }
-                if (!improved) break;
+        // --- Gallery carousel (ปัด/ลากดู, ลูกศร, ตัวนับ, แถบความคืบหน้า) ---
+        const galleryGrid = document.getElementById('galleryGrid');      // = .gallery-track
+        const galleryCells = Array.from(galleryGrid.children);          // เรียงตามลำดับรูป (ใช้กับ lightbox ด้วย)
+        const gPrev = document.getElementById('gallery-prev');
+        const gNext = document.getElementById('gallery-next');
+        const gCount = document.getElementById('gallery-count');
+        const gBar = document.getElementById('gallery-bar');
+        const gHint = document.getElementById('gallery-hint');
+        let gTicking = false;
+        function updateCarousel() {
+            gTicking = false;
+            const cells = galleryCells.filter(c => !c.classList.contains('is-missing'));
+            const max = galleryGrid.scrollWidth - galleryGrid.clientWidth;
+            const frac = max > 0 ? galleryGrid.scrollLeft / max : 0;
+            let idx = 0;
+            if (frac > 0.985) idx = cells.length - 1;
+            else {
+                const padL = parseFloat(getComputedStyle(galleryGrid).paddingLeft) || 0;
+                const target = galleryGrid.scrollLeft + padL;
+                let best = Infinity;
+                cells.forEach((c, i) => { const d = Math.abs(c.offsetLeft - target); if (d < best) { best = d; idx = i; } });
             }
-            return cols.map(col => col.sort((u, v) => u.i - v.i).map(x => x.c));
+            gCount.textContent = (idx + 1) + ' / ' + cells.length;
+            gBar.style.width = Math.max(8, frac * 100) + '%';
+            gPrev.disabled = galleryGrid.scrollLeft < 8;
+            gNext.disabled = galleryGrid.scrollLeft > max - 8;
+            if (galleryGrid.scrollLeft > 30) gHint.classList.add('is-hidden');
         }
-        let currentCols = 0;
-        function layoutGallery() {
-            const n = colCountForWidth();
-            if (n === currentCols) return;
-            currentCols = n;
-            galleryGrid.textContent = '';
-            balanceColumns(n).forEach(list => {
-                const col = document.createElement('div');
-                col.className = 'gallery-col';
-                list.forEach(c => col.appendChild(c));
-                galleryGrid.appendChild(col);
-            });
-            galleryGrid.classList.add('is-masonry');
-        }
-        layoutGallery();
-        let resizeTimer;
-        window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(layoutGallery, 150); });
+        galleryGrid.addEventListener('scroll', () => { if (!gTicking) { gTicking = true; requestAnimationFrame(updateCarousel); } }, { passive: true });
+        window.addEventListener('resize', updateCarousel);
+        const gStep = () => Math.max(galleryGrid.clientWidth * 0.8, 240);
+        gPrev.addEventListener('click', () => galleryGrid.scrollBy({ left: -gStep(), behavior: 'smooth' }));
+        gNext.addEventListener('click', () => galleryGrid.scrollBy({ left: gStep(), behavior: 'smooth' }));
+
+        // ลากด้วยเมาส์บนคอม (บนมือถือใช้การปัดตามปกติ)
+        let gDrag = null, gMoved = false;
+        galleryGrid.addEventListener('pointerdown', (e) => {
+            if (e.pointerType !== 'mouse' || e.button !== 0) return;
+            gDrag = { x: e.clientX, left: galleryGrid.scrollLeft };
+            gMoved = false;
+        });
+        window.addEventListener('pointermove', (e) => {
+            if (!gDrag) return;
+            const dx = e.clientX - gDrag.x;
+            if (!gMoved && Math.abs(dx) > 6) { gMoved = true; galleryGrid.classList.add('is-dragging'); }
+            if (gMoved) galleryGrid.scrollLeft = gDrag.left - dx;
+        });
+        window.addEventListener('pointerup', () => {
+            if (!gDrag) return;
+            gDrag = null;
+            galleryGrid.classList.remove('is-dragging');
+            setTimeout(() => { gMoved = false; }, 0);
+        });
+        galleryGrid.addEventListener('click', (e) => { if (gMoved) { e.stopPropagation(); e.preventDefault(); } }, true);
+        // รอรูปแรกๆ โหลดแล้วค่อยคำนวณตัวนับ
+        updateCarousel();
+        galleryCells.forEach(c => c.querySelector('img').addEventListener('load', updateCarousel, { once: true }));
 
         // --- Gallery Lightbox (ก่อนหน้า/ถัดไป, ปุ่มลูกศร, ปัดซ้ายขวาบนมือถือ) ---
         const modal = document.getElementById('modal');
@@ -1035,13 +1071,13 @@
             if (!galleryImgs.length) return;
             currentIdx = (i + galleryImgs.length) % galleryImgs.length;
             const img = galleryImgs[currentIdx];
-            modalImg.src = img.src;
+            modalImg.src = img.dataset.full || img.src;
             modalImg.alt = img.alt;
             modalCounter.textContent = (currentIdx + 1) + ' / ' + galleryImgs.length;
             // preload ภาพข้างเคียงให้เลื่อนลื่นขึ้น
             [currentIdx + 1, currentIdx - 1].forEach(k => {
                 const n = galleryImgs[(k + galleryImgs.length) % galleryImgs.length];
-                if (n) new Image().src = n.src;
+                if (n) new Image().src = n.dataset.full || n.src;
             });
         }
         function openGallery(cell) {

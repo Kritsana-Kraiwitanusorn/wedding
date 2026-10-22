@@ -502,6 +502,33 @@
             .gallery-cell.is-clone { display: none; }
         }
 
+        /* --- น้องสติส: รูปวงกลมซ้อนกันในไทม์ไลน์ --- */
+        .pet-stack { display: flex; align-items: center; margin-top: 16px; padding-left: 5px; }
+        .timeline-item.left .pet-stack { justify-content: flex-end; padding: 0 5px 0 0; }
+        .pet-photo {
+            position: relative;
+            flex: 0 0 auto;
+            width: 80px;
+            height: 80px;
+            margin: 0 0 0 -8px;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            background: var(--soft-pink);
+            cursor: pointer;
+            /* ขอบขาว + เส้นบางสีชมพู + เงานุ่ม ให้ดูมินิมอล */
+            box-shadow: 0 0 0 3px #fff, 0 0 0 4.5px var(--soft-pink), 0 8px 16px rgba(232,142,142,0.28);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pet-photo:first-child { margin-left: 0; }
+        .pet-photo img { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .pet-photo:hover, .pet-photo:focus-visible {
+            transform: translateY(-4px) scale(1.07);
+            z-index: 3;
+            box-shadow: 0 0 0 3px #fff, 0 0 0 4.5px var(--deep-pink), 0 12px 20px rgba(232,142,142,0.4);
+        }
+        .pet-photo:focus-visible { outline: none; }
+
         /* --- Timeline --- */
         .timeline { position: relative; max-width: 800px; margin: 40px auto; }
         .timeline::after {
@@ -798,6 +825,7 @@
             .timeline::after { left: 10px; }
             .timeline-item.right { left: 0; }
             .timeline-item::after { left: -2px !important; }
+            .timeline-item.left::after, .timeline-item.right::after { left: -6px !important; right: auto !important; }
         }
 
         /* --- Modal Lightbox --- */
@@ -976,7 +1004,16 @@
                 <div class="timeline-item left"><h4>Location of First Met : </h4><h3>Kmutnb</h3><p>สถานที่ที่เราเจอกันครั้งแรก</p></div>
                 <div class="timeline-item right"><h4>Our First Trip Together : </h4><h3>Samet Koh</h3><p>สถานที่ทีเที่ยวด้วยกันครั้งแรก</p></div>
                 <div class="timeline-item left"><h4>Became a Couple : </h4><h3>08Dec2016</h3><p>วันที่ตัดสินใจเป็นแฟนกัน</p></div>
-                <div class="timeline-item right"><h4>The Proposal : </h4><h3>04Mar2026</h3><p>วันที่ตัดสินใจจะใช้ชีวิตคู่ร่วมกัน</p></div>
+                <div class="timeline-item right">
+                    <h4>Welcomed our Dog : </h4><h3>15Oct2018</h3>
+                    <p><span style="display:inline-block">วันที่น้องสติสก้าวเข้ามา</span> <span style="display:inline-block">เป็นสมาชิกตัวน้อยในครอบครัวของเรา 🐾</span></p>
+                    <div class="pet-stack" role="group" aria-label="รูปน้องสติส">
+                        <button type="button" class="pet-photo" aria-label="ดูรูปน้องสติส ภาพที่ 1"><img src="images/pets/stis-1-thumb.jpg" data-full="images/pets/stis-1.jpg" alt="น้องสติสใส่สร้อยทองและเสื้อแดง" width="360" height="360" loading="lazy" decoding="async"></button>
+                        <button type="button" class="pet-photo" aria-label="ดูรูปน้องสติส ภาพที่ 2"><img src="images/pets/stis-2-thumb.jpg" data-full="images/pets/stis-2.jpg" alt="น้องสติสสวมผ้าโพกหัวสีสดใส" width="360" height="360" loading="lazy" decoding="async"></button>
+                        <button type="button" class="pet-photo" aria-label="ดูรูปน้องสติส ภาพที่ 3"><img src="images/pets/stis-3-thumb.jpg" data-full="images/pets/stis-3.jpg" alt="น้องสติสนอนหลับปุ๋ย" width="360" height="360" loading="lazy" decoding="async"></button>
+                    </div>
+                </div>
+                <div class="timeline-item left"><h4>The Proposal : </h4><h3>04Mar2026</h3><p>วันที่ตัดสินใจจะใช้ชีวิตคู่ร่วมกัน</p></div>
             </div>
         </section>
 
@@ -1213,17 +1250,20 @@
                 if (n) new Image().src = n.dataset.full || n.src;
             });
         }
-        function openGallery(cell) {
-            if (cell.classList.contains('is-missing')) return;
-            galleryImgs = galleryCells.filter(c => !c.classList.contains('is-missing')).map(c => c.querySelector('.gallery-item'));
-            const orig = galleryCells[+cell.dataset.i] || cell;                       // ถ้ากดสำเนา ให้ใช้รูปต้นฉบับ
-            const idx = galleryImgs.indexOf(orig.querySelector('.gallery-item'));
+        function openLightbox(imgs, idx) {
+            galleryImgs = imgs;
             lastFocused = document.activeElement;
             showImage(idx < 0 ? 0 : idx);
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             document.body.classList.add('lb-open');
             document.getElementById('modal-close').focus();
+        }
+        function openGallery(cell) {
+            if (cell.classList.contains('is-missing')) return;
+            const imgs = galleryCells.filter(c => !c.classList.contains('is-missing')).map(c => c.querySelector('.gallery-item'));
+            const orig = galleryCells[+cell.dataset.i] || cell;                       // ถ้ากดสำเนา ให้ใช้รูปต้นฉบับ
+            openLightbox(imgs, imgs.indexOf(orig.querySelector('.gallery-item')));
         }
         function closeModal() {
             modal.style.display = 'none';
@@ -1236,6 +1276,9 @@
             const cell = e.target.closest('.gallery-cell');
             if (cell) openGallery(cell);
         });
+        // รูปน้องสติสในไทม์ไลน์: กดแล้วเปิดดูเป็นชุดเล็กของตัวเอง (1/3, 2/3, 3/3)
+        const petImgs = Array.from(document.querySelectorAll('.pet-photo img'));
+        petImgs.forEach((img, i) => img.closest('.pet-photo').addEventListener('click', () => openLightbox(petImgs, i)));
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
         document.getElementById('modal-close').addEventListener('click', closeModal);
         document.getElementById('modal-prev').addEventListener('click', () => showImage(currentIdx - 1));

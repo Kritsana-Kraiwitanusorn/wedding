@@ -278,7 +278,7 @@
             align-items: center;
             text-align: center;
             padding: 16vh 20px 20px;
-            color: var(--soft-pink);
+            color: #fff;
         }
 
         .hero h1 {
@@ -344,6 +344,12 @@
             font-size: 1.7rem;
             line-height: 1.3;
         }
+        .nowrap { white-space: nowrap; }
+        .section h3.cute-heading { text-wrap: balance; }
+        @media (max-width: 480px) {
+            .section h3.cute-heading { font-size: clamp(1.9rem, 9vw, 2.4rem); }
+        }
+
         .section .eyebrow {
             display: block;
             text-transform: uppercase;
@@ -355,22 +361,37 @@
 
         /* --- Countdown --- */
         #timer {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));   /* 4 กล่องอยู่แถวเดียวเสมอ ไม่ตกบรรทัด */
+            gap: 14px;
+            max-width: 480px;
+            margin: 30px auto 0;
         }
 
         .time-box {
             background: white;
-            padding: 20px;
+            padding: 18px 6px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(255,177,177,0.2);
-            min-width: 80px;
+            min-width: 0;
+            text-align: center;
+            font-size: 0.95rem;
+            white-space: nowrap;
         }
 
-        .time-box span { font-size: 2rem; font-weight: bold; color: var(--deep-pink); display: block; font-variant-numeric: tabular-nums; }
+        .time-box span { font-size: 2rem; font-weight: bold; color: var(--deep-pink); display: block; font-variant-numeric: tabular-nums; line-height: 1.2; }
+
+        /* มือถือ: ย่อช่องไฟและตัวเลขให้พอดีกับความกว้างจอ */
+        @media (max-width: 480px) {
+            #timer { gap: 8px; padding: 0 4px; }
+            .time-box { padding: 14px 2px; border-radius: 13px; font-size: 0.8rem; }
+            .time-box span { font-size: 1.6rem; }
+        }
+        @media (max-width: 340px) {
+            #timer { gap: 6px; }
+            .time-box { font-size: 0.72rem; }
+            .time-box span { font-size: 1.35rem; }
+        }
 
         .cta-row {
             display: flex;
@@ -519,6 +540,101 @@
 
         @media (max-width: 768px) {
             .timeline-item.right::after { left: -17px !important; }
+        }
+
+        /* --- Schedule (กำหนดการ) --- */
+        .schedule-date {
+            display: inline-block;
+            margin: 8px 0 36px;
+            padding: 9px 22px;
+            background: var(--soft-pink);
+            color: var(--deep-pink-dark);
+            border-radius: 999px;
+            font-weight: 500;
+            font-size: 0.98rem;
+        }
+        .schedule {
+            list-style: none;
+            margin: 0 auto;
+            padding: 0;
+            max-width: 960px;
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+        /* เส้นประเชื่อมแต่ละช่วงเวลา (คล้ายเส้นทางบินในบัตรเชิญ) */
+        .schedule::before {
+            content: '';
+            position: absolute;
+            top: 28px;
+            left: 12.5%;
+            right: 12.5%;
+            border-top: 2px dashed var(--deep-pink);
+            opacity: 0.7;
+        }
+        .schedule-item {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.is-visible .schedule-item { opacity: 1; transform: none; }
+        .reveal.is-visible .schedule-item:nth-child(2) { transition-delay: 0.12s; }
+        .reveal.is-visible .schedule-item:nth-child(3) { transition-delay: 0.24s; }
+        .reveal.is-visible .schedule-item:nth-child(4) { transition-delay: 0.36s; }
+
+        .schedule-icon {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid var(--deep-pink);
+            font-size: 1.5rem;
+            box-shadow: 0 6px 16px rgba(232,142,142,0.25);
+            transition: transform 0.3s ease;
+        }
+        .schedule-item:hover .schedule-icon { transform: scale(1.1); }
+
+        .schedule-card {
+            flex: 1;
+            width: 100%;
+            margin-top: 16px;
+            padding: 18px 12px 20px;
+            background: #fff;
+            border: 1px solid var(--soft-pink);
+            border-radius: 18px;
+            box-shadow: 0 8px 22px rgba(232,142,142,0.14);
+        }
+        .schedule-time {
+            display: block;
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+            font-size: 1.75rem;
+            line-height: 1.15;
+            color: var(--deep-pink-dark);
+        }
+        .schedule-time small { font-size: 0.9rem; font-weight: 500; margin-left: 4px; }
+        .schedule-card h4 { margin: 8px 0 2px; font-size: 1.05rem; font-weight: 600; color: var(--text-gray); }
+        .schedule-card p { margin: 0; font-size: 0.78rem; letter-spacing: 0.4px; color: #a8a8a8; }
+
+        /* มือถือ: เรียงแนวตั้ง มีเส้นประด้านซ้าย */
+        @media (max-width: 760px) {
+            .schedule { grid-template-columns: 1fr; gap: 14px; max-width: 420px; }
+            .schedule::before {
+                top: 28px; bottom: 28px; left: 27px; right: auto;
+                border-top: 0; border-left: 2px dashed var(--deep-pink);
+            }
+            .schedule-item { flex-direction: row; align-items: center; gap: 16px; text-align: left; }
+            .schedule-card { margin-top: 0; padding: 14px 18px 16px; }
+            .schedule-time { font-size: 1.6rem; }
         }
 
         /* --- Theme / Dress code --- */
@@ -802,7 +918,7 @@
 
         <section class="section reveal">
             <span class="eyebrow">Countdown</span>
-            <h3 class="cute-heading">นับถอยหลังสู่วันสำคัญ</h3>
+            <h3 class="cute-heading"><span class="nowrap">นับถอยหลัง</span> <span class="nowrap">สู่วันสำคัญ</span></h3>
             <div id="timer" role="timer" aria-live="off">
                 <div class="time-box"><span id="days">0</span>วัน</div>
                 <div class="time-box"><span id="hours">0</span>ชม.</div>
@@ -882,6 +998,46 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section id="schedule" class="section reveal">
+            <span class="eyebrow">Schedule</span>
+            <h3 class="cute-heading">กำหนดการวันงาน</h3>
+            <p class="schedule-date">📅 วันศุกร์ที่ 20 พฤศจิกายน 2569</p>
+            <ol class="schedule" aria-label="กำหนดการวันงาน">
+                <li class="schedule-item">
+                    <span class="schedule-icon" aria-hidden="true">🙏</span>
+                    <div class="schedule-card">
+                        <time class="schedule-time" datetime="2026-11-20T15:39">15:39<small>น.</small></time>
+                        <h4>พิธีสงฆ์</h4>
+                        <p>Monk Ceremony</p>
+                    </div>
+                </li>
+                <li class="schedule-item">
+                    <span class="schedule-icon" aria-hidden="true">💍</span>
+                    <div class="schedule-card">
+                        <time class="schedule-time" datetime="2026-11-20T16:09">16:09<small>น.</small></time>
+                        <h4>พิธีหมั้นรับไหว้</h4>
+                        <p>Engagement Ceremony</p>
+                    </div>
+                </li>
+                <li class="schedule-item">
+                    <span class="schedule-icon" aria-hidden="true">🐚</span>
+                    <div class="schedule-card">
+                        <time class="schedule-time" datetime="2026-11-20T17:09">17:09<small>น.</small></time>
+                        <h4>พิธีรดน้ำสังข์</h4>
+                        <p>Water Pouring Ceremony</p>
+                    </div>
+                </li>
+                <li class="schedule-item">
+                    <span class="schedule-icon" aria-hidden="true">🥂</span>
+                    <div class="schedule-card">
+                        <time class="schedule-time" datetime="2026-11-20T18:00">18:00<small>น.</small></time>
+                        <h4>ฉลองมงคลสมรส</h4>
+                        <p>Wedding Celebration</p>
+                    </div>
+                </li>
+            </ol>
         </section>
 
         <section id="location" class="section reveal">
